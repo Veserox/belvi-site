@@ -14,7 +14,7 @@
 /* Layout: витрина — узкая шапка, крупный заголовок-манифест, сетка карточек с иллюстрациями вещей, выезжающая корзина справа */
 :root{
   --bg:#F4F3F2; --surface:#FFFFFF; --fg:#151313; --muted:#67615F; --line:#DEDAD7;
-  --accent:#C40411; --accent-fg:#FFFFFF; --tag:#ECE8E6; --ok:#2E7D4F;
+  --accent:#C40411; --accent-fg:#FFFFFF; --tag:#ECE8E6; --ok:#2E7D4F; --wa:#1DA851;
   --display:"Unbounded", "Arial Black", system-ui, sans-serif;
   --body:"Golos Text", "Segoe UI", system-ui, sans-serif;
   color-scheme:light;
@@ -72,7 +72,7 @@ header.top .wrap{display:flex;align-items:center;gap:16px;padding-block:14px}
 .price{font-weight:600;font-variant-numeric:tabular-nums;white-space:nowrap}
 .price s{color:var(--muted);font-weight:400;margin-right:6px}
 .sub{color:var(--muted);font-size:14px;margin-top:-8px}
-.sizes{display:flex;flex-wrap:wrap;gap:6px}
+.sizes{display:flex;flex-wrap:wrap;gap:6px;margin-top:auto}
 .size{min-width:40px;border:1px solid var(--line);background:var(--surface);border-radius:6px;padding:5px 8px;font-size:13px;font-variant-numeric:tabular-nums}
 .size[aria-pressed="true"]{border-color:var(--fg);box-shadow:inset 0 0 0 1px var(--fg);font-weight:600}
 .add{border:0;background:var(--accent);color:var(--accent-fg);border-radius:6px;padding:10px;font-weight:600}
@@ -139,6 +139,10 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:24px;justify-content:space-between}
 .preview img{width:72px;height:72px;object-fit:cover;border-radius:6px;border:1px solid var(--line)}
 .own{background:none;border:0;padding:0;color:var(--accent);font-size:14px;text-align:left;text-decoration:underline;text-underline-offset:3px}
 @media (max-width:860px){.custom{grid-template-columns:minmax(0,1fr)}}
+.primary.wa{background:var(--wa);color:#fff}
+.wa-link{color:var(--accent);font-weight:600}
+.wa-float{position:fixed;right:calc(16px + env(safe-area-inset-right,0px));bottom:calc(16px + env(safe-area-inset-bottom,0px));z-index:15;width:56px;height:56px;border-radius:50%;background:var(--wa);display:grid;place-items:center;box-shadow:0 6px 18px rgba(0,0,0,.25)}
+.wa-float svg{width:30px;height:30px}
 @media (max-width:760px){.hero{grid-template-columns:1fr;padding-block:28px 16px}.navlink{display:none}}
 @media (prefers-reduced-motion:reduce){.drawer{transition:none}}
 </style>
@@ -204,18 +208,19 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:24px;justify-content:space-between}
         <label for="c-name">Имя<input id="c-name" required autocomplete="name"></label>
         <label for="c-phone">Телефон или WhatsApp<input id="c-phone" type="tel" required autocomplete="tel" placeholder="+7 700 000-00-00"></label>
       </div>
-      <button class="primary" type="submit">Отправить заявку</button>
-      <p class="note" style="margin:0" id="cNote">Демо-витрина: заявка пока никуда не отправляется.</p>
+      <button class="primary wa" type="submit">Отправить заявку в WhatsApp</button>
+      <p class="note" style="margin:0" id="cNote">Откроется WhatsApp с готовым сообщением. Останется нажать «Отправить».</p>
     </form>
   </section>
 
 </main>
 
 <footer><div class="wrap">
-  <div><b style="color:var(--fg)">Belvi Brand</b><br>Демо-витрина. Цены и условия доставки приведены для примера.</div>
-  <div>Пн–Вс, 10:00–21:00<br>Телефон и почту добавим из ваших данных</div>
+  <div><b style="color:var(--fg)">Belvi Brand</b><br>Одежда собственного пошива с ручной вышивкой</div>
+  <div>WhatsApp и телефон: <a class="wa-link" href="https://wa.me/77055149835" target="_blank" rel="noopener">+7 705 514 98 35</a><br>Пн–Вс, 10:00–21:00</div>
 </div></footer>
 
+<a class="wa-float" href="https://wa.me/77055149835" target="_blank" rel="noopener" aria-label="Написать в WhatsApp"><svg viewBox="0 0 32 32" fill="#fff" aria-hidden="true"><path d="M16 3a13 13 0 0 0-11.2 19.6L3 29l6.6-1.7A13 13 0 1 0 16 3zm0 23.6c-2 0-4-.6-5.7-1.6l-.4-.2-3.9 1 1-3.8-.3-.4A10.6 10.6 0 1 1 16 26.6zm5.8-7.9c-.3-.2-1.9-.9-2.2-1s-.5-.2-.7.2-.8 1-1 1.2-.4.2-.7 0a8.7 8.7 0 0 1-4.3-3.8c-.3-.6.3-.5 1-1.7.1-.2 0-.4 0-.6l-1-2.4c-.3-.6-.5-.5-.7-.5h-.6c-.2 0-.6.1-.9.4s-1.2 1.1-1.2 2.7 1.2 3.2 1.4 3.4 2.4 3.6 5.7 5c2.1.9 2.9 1 4 .8.6-.1 1.9-.8 2.2-1.6s.3-1.4.2-1.6-.3-.3-.6-.4z"/></svg></a>
 <div class="scrim" id="scrim" hidden></div>
 <aside class="drawer" id="drawer" aria-label="Корзина" aria-hidden="true">
   <div class="dhead"><h2 id="dTitle">Корзина</h2><button class="x" id="closeCart" type="button" aria-label="Закрыть">×</button></div>
@@ -307,9 +312,9 @@ function renderCart(){
       <label for="f-ship">Доставка<select id="f-ship"><option>Курьер по городу</option><option>СДЭК по Казахстану</option><option>Казпочта</option></select></label>
       <label for="f-wish">Пожелания к вышивке (необязательно)<textarea id="f-wish" rows="2" placeholder="Цвет нити, имя, другой узор"></textarea></label>
       <label for="f-addr">Адрес<textarea id="f-addr" rows="2" required autocomplete="street-address"></textarea></label>
-      <div class="total"><span>К оплате при получении</span><span>${rub(sum()+(sum()>=FREE?0:SHIP))}</span></div>
-      <p class="note" style="margin:0">Это демо-витрина: заявка не отправляется. Онлайн-оплату (Kaspi, карта) можно подключить позже.</p>
-      <button class="primary" type="submit">Подтвердить заказ</button>
+      <div class="total"><span>Итого с доставкой</span><span>${rub(sum()+(sum()>=FREE?0:SHIP))}</span></div>
+      <p class="note" style="margin:0">Откроется WhatsApp с готовым заказом. Отправьте сообщение, и мы подтвердим наличие, доставку и способ оплаты.</p>
+      <button class="primary wa" type="submit">Отправить заказ в WhatsApp</button>
       <button class="chip" type="button" id="back">Назад в корзину</button>
     </form>`;return}
   $('dTitle').textContent='Корзина';
@@ -340,13 +345,29 @@ document.addEventListener('click',e=>{
   else if(t.id==='back'){view='cart';renderCart()}
   else if(t.dataset.own){$('c-model').value=TYPE[t.dataset.own];$('custom').scrollIntoView({behavior:'smooth'});setTimeout(()=>$('c-design').focus({preventScroll:true}),500)}
 });
+const WA='77055149835';
+const waUrl=t=>'https://wa.me/'+WA+'?text='+encodeURIComponent(t);
+const goWA=url=>{const w=window.open(url,'_blank');if(!w)location.href=url};
 document.addEventListener('submit',e=>{
-  if(e.target.id==='customForm'){e.preventDefault();const n=$('c-name').value.trim();$('cNote').innerHTML=`<b style="color:var(--ok)">Заявка BLV-${String(Date.now()).slice(-6)} принята.</b> ${n?n+', в':'В'} рабочей версии мы свяжемся с вами, чтобы согласовать макет. Демо: данные никуда не отправлены.`;return}
-  if(e.target.id!=='coForm')return;e.preventDefault();
-  const name=$('f-name').value.trim().split(' ')[0];
   const num='BLV-'+String(Date.now()).slice(-6);
+  if(e.target.id==='customForm'){e.preventDefault();
+    const t=[`Здравствуйте! Заявка на вышивку ${num}`,'',
+      `Изделие: ${$('c-model').value}`,`Размер: ${$('c-size').value}`,`Цвет ткани: ${$('c-color').value}`,
+      `Дизайн: ${$('c-design').value.trim()}`,'',`Имя: ${$('c-name').value.trim()}`,`Телефон: ${$('c-phone').value.trim()}`,
+      $('c-file').files.length?'\nЭскиз пришлю следующим сообщением.':''].join('\n');
+    const url=waUrl(t);goWA(url);
+    $('cNote').innerHTML=`<b style="color:var(--ok)">Заявка ${num} готова.</b> Если WhatsApp не открылся, <a href="${url}" target="_blank" rel="noopener">нажмите здесь</a>.${$('c-file').files.length?' Эскиз отправьте в этот же чат: WhatsApp не принимает файлы по ссылке.':''}`;return}
+  if(e.target.id!=='coForm')return;e.preventDefault();
+  const s=sum(),ship=s>=FREE?0:SHIP;
+  const items=cart.map((l,i)=>{const x=P.find(p=>p.id===l.id);return `${i+1}. ${x.n}, размер ${l.s}, ${l.q} шт. — ${rub(x.p*l.q)}`});
+  const wish=$('f-wish').value.trim();
+  const t=[`Здравствуйте! Заказ ${num}`,'',...items,'',`Товары: ${rub(s)}`,`Доставка: ${ship?rub(ship):'бесплатно'}`,`Итого: ${rub(s+ship)}`,'',
+    `Имя: ${$('f-name').value.trim()}`,`Телефон: ${$('f-phone').value.trim()}`,`Доставка: ${$('f-ship').value}`,`Адрес: ${$('f-addr').value.trim()}`,
+    wish?`Пожелания к вышивке: ${wish}`:''].filter((x,i,a)=>x!==''||a[i-1]!=='').join('\n');
+  const url=waUrl(t);goWA(url);
+  const name=$('f-name').value.trim().split(' ')[0];
   cart=[];save();view='done';renderCart();
-  $('dBody').innerHTML=`<div class="done"><h3>Заказ ${num} принят</h3><p>${name?name+', с':'С'}пасибо! В рабочей версии менеджер перезвонит, чтобы подтвердить доставку.</p><p class="note">Демо: данные никуда не отправлены.</p></div><button class="primary" type="button" id="back">Продолжить покупки</button>`;
+  $('dBody').innerHTML=`<div class="done"><h3>Заказ ${num} оформлен</h3><p>${name?name+', о':'О'}тправьте сообщение в открывшемся WhatsApp, и мы подтвердим заказ и доставку.</p><p><a class="wa-link" href="${url}" target="_blank" rel="noopener">Открыть WhatsApp ещё раз</a></p></div><button class="primary" type="button" id="back">Продолжить покупки</button>`;
 });
 $('sort').addEventListener('change',e=>{sort=e.target.value;renderGrid()});
 $('cartBtn').onclick=openCart;$('closeCart').onclick=closeCart;$('scrim').onclick=closeCart;
