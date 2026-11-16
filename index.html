@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="Belvi Brand: худи, свитшоты и футболки собственного пошива с ручной вышивкой. Любой дизайн на заказ.">
+<link rel="icon" href="img/logo.jpg">
+<style>body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
+<title>Belvi Brand</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@500;700&family=Golos+Text:wght@400;500;600&display=swap">
+<style>
+/* Layout: витрина — узкая шапка, крупный заголовок-манифест, сетка карточек с иллюстрациями вещей, выезжающая корзина справа */
+:root{
+  --bg:#F4F3F2; --surface:#FFFFFF; --fg:#151313; --muted:#67615F; --line:#DEDAD7;
+  --accent:#C40411; --accent-fg:#FFFFFF; --tag:#ECE8E6; --ok:#2E7D4F;
+  --display:"Unbounded", "Arial Black", system-ui, sans-serif;
+  --body:"Golos Text", "Segoe UI", system-ui, sans-serif;
+  color-scheme:light;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#121111; --surface:#1C1A1A; --fg:#F1EEED; --muted:#A8A19F; --line:#332F2E;
+  --accent:#E8303A; --accent-fg:#FFFFFF; --tag:#2A2626; --ok:#6CCB93; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#121111; --surface:#1C1A1A; --fg:#F1EEED; --muted:#A8A19F; --line:#332F2E;
+  --accent:#E8303A; --accent-fg:#FFFFFF; --tag:#2A2626; --ok:#6CCB93; color-scheme:dark}
+
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--fg);font:16px/1.55 var(--body)}
+.wrap{max-width:1180px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+button,input,select,textarea{font:inherit;color:inherit}
+button{cursor:pointer}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--bg)}
+header.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--bg);border-bottom:1px solid var(--line)}
+header.top .wrap{display:flex;align-items:center;gap:16px;padding-block:14px}
+.logo{display:flex;align-items:center;gap:10px;font:700 15px/1 var(--display);letter-spacing:.08em;margin-right:auto}
+.logo img{width:38px;height:38px;border-radius:6px;display:block}
+.logo span{color:var(--muted);font-weight:500}
+.navlink{background:none;border:0;color:var(--muted);padding:6px 4px}
+.navlink:hover{color:var(--fg)}
+.cartbtn{display:flex;align-items:center;gap:8px;background:var(--fg);color:var(--bg);border:0;border-radius:999px;padding:9px 16px;font-weight:600}
+.cartbtn b{background:var(--accent);color:var(--accent-fg);border-radius:999px;min-width:22px;height:22px;display:inline grid;place-items:center;font-size:13px;padding:0 6px;font-variant-numeric:tabular-nums}
+
+.hero{padding-block:48px 28px;display:grid;grid-template-columns:1.4fr 1fr;gap:32px;align-items:end}
+.hero h1{font:700 clamp(32px,6vw,64px)/1.02 var(--display);letter-spacing:-.03em;margin:0;text-wrap:balance}
+.hero h1 em{font-style:normal;color:var(--accent)}
+.eyebrow{font-size:12px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);margin-bottom:14px}
+.hero p{margin:0;color:var(--muted);max-width:42ch}
+.perks{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px}
+.perk{background:var(--tag);border-radius:999px;padding:5px 12px;font-size:13px;color:var(--fg)}
+
+.toolbar{display:flex;flex-wrap:wrap;gap:8px;align-items:center;padding-block:16px;border-top:1px solid var(--line)}
+.chip{border:1px solid var(--line);background:transparent;border-radius:999px;padding:7px 14px;font-size:14px}
+.chip[aria-pressed="true"]{background:var(--fg);color:var(--bg);border-color:var(--fg)}
+.toolbar .sp{flex:1}
+.toolbar select{border:1px solid var(--line);background:var(--surface);border-radius:8px;padding:7px 10px;font-size:14px}
+
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:20px;padding-block:8px 64px}
+.card{display:flex;flex-direction:column;gap:12px;min-width:0}
+.pic{aspect-ratio:4/5;max-width:100%;border-radius:6px;display:grid;place-items:center;position:relative;overflow:hidden}
+.pic img{width:100%;height:100%;object-fit:cover;display:block}
+.dots{position:absolute;bottom:10px;left:0;right:0;display:flex;justify-content:center;gap:6px}
+.dot{width:28px;height:28px;border:0;background:none;padding:0;display:grid;place-items:center}
+.dot::before{content:"";width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,.55);box-shadow:0 0 0 1px rgba(0,0,0,.25)}
+.dot[aria-pressed="true"]::before{background:#fff;width:20px;border-radius:4px}
+.badge{position:absolute;top:10px;left:10px;background:var(--surface);color:var(--fg);font-size:12px;font-weight:600;padding:3px 9px;border-radius:999px}
+.meta{display:flex;justify-content:space-between;gap:12px;align-items:baseline}
+.meta h3{font-size:16px;font-weight:600;margin:0}
+.price{font-weight:600;font-variant-numeric:tabular-nums;white-space:nowrap}
+.price s{color:var(--muted);font-weight:400;margin-right:6px}
+.sub{color:var(--muted);font-size:14px;margin-top:-8px}
+.sizes{display:flex;flex-wrap:wrap;gap:6px}
+.size{min-width:40px;border:1px solid var(--line);background:var(--surface);border-radius:6px;padding:5px 8px;font-size:13px;font-variant-numeric:tabular-nums}
+.size[aria-pressed="true"]{border-color:var(--fg);box-shadow:inset 0 0 0 1px var(--fg);font-weight:600}
+.add{border:0;background:var(--accent);color:var(--accent-fg);border-radius:6px;padding:10px;font-weight:600}
+.add:disabled{background:var(--tag);color:var(--muted);cursor:not-allowed}
+
+.scrim{position:fixed;inset:0;background:rgba(10,12,10,.45);z-index:20}
+.drawer{position:fixed;top:0;right:0;bottom:0;width:min(420px,100%);background:var(--surface);z-index:21;display:flex;flex-direction:column;
+  padding:calc(20px + env(safe-area-inset-top,0px)) max(20px,env(safe-area-inset-right,0px)) calc(20px + env(safe-area-inset-bottom,0px)) 20px;
+  transform:translateX(100%);transition:transform .25s ease}
+.drawer.open{transform:none}
+.drawer h2{font:700 20px/1.2 var(--display);margin:0}
+.dhead{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px}
+.x{background:none;border:1px solid var(--line);border-radius:999px;width:36px;height:36px;font-size:18px}
+.lines{flex:1;overflow:auto;display:flex;flex-direction:column;gap:14px}
+.line{display:grid;grid-template-columns:64px 1fr auto;gap:12px;align-items:center}
+.line .th{aspect-ratio:4/5;border-radius:4px;overflow:hidden}
+.line .th img{width:100%;height:100%;object-fit:cover;display:block}
+.line small{color:var(--muted);display:block}
+.qty{display:flex;align-items:center;gap:6px;margin-top:4px}
+.qty button{width:26px;height:26px;border:1px solid var(--line);background:none;border-radius:4px;line-height:1}
+.ship{font-size:13px;color:var(--muted);margin:12px 0 6px}
+.bar{height:4px;background:var(--tag);border-radius:2px;overflow:hidden}
+.bar i{display:block;height:100%;background:var(--ok)}
+.total{display:flex;justify-content:space-between;font-weight:600;font-size:18px;padding-block:14px;border-top:1px solid var(--line);margin-top:14px;font-variant-numeric:tabular-nums}
+.primary{width:100%;border:0;background:var(--fg);color:var(--bg);border-radius:6px;padding:13px;font-weight:600}
+.primary:disabled{opacity:.4;cursor:not-allowed}
+.empty{color:var(--muted);text-align:center;padding:40px 0}
+form.co{display:flex;flex-direction:column;gap:10px}
+form.co label{font-size:13px;color:var(--muted);display:flex;flex-direction:column;gap:4px}
+form.co input,form.co select,form.co textarea{border:1px solid var(--line);background:var(--bg);border-radius:6px;padding:9px 10px;font-size:15px}
+.note{font-size:12px;color:var(--muted)}
+.done{text-align:center;padding:30px 0}
+.done h3{font:700 22px/1.2 var(--display);margin:0 0 8px;color:var(--ok)}
+
+dialog{border:0;border-radius:10px;background:var(--surface);color:var(--fg);padding:24px;max-width:min(560px,calc(100% - 32px))}
+dialog::backdrop{background:rgba(10,12,10,.45)}
+.tbl{overflow-x:auto}
+table{border-collapse:collapse;width:100%;font-variant-numeric:tabular-nums;font-size:14px}
+th,td{text-align:left;padding:8px 10px;border-bottom:1px solid var(--line)}
+th{color:var(--muted);font-weight:500;font-size:12px;text-transform:uppercase;letter-spacing:.06em}
+
+footer{border-top:1px solid var(--line);padding-block:28px;color:var(--muted);font-size:14px}
+footer .wrap{display:flex;flex-wrap:wrap;gap:24px;justify-content:space-between}
+
+.custom{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:40px;padding-block:56px;border-top:1px solid var(--line);align-items:start}
+.custom h2{font:700 clamp(26px,4vw,40px)/1.08 var(--display);letter-spacing:-.02em;margin:0 0 14px;text-wrap:balance}
+.custom h2 em{font-style:normal;color:var(--accent)}
+.custom > div{min-width:0}
+.lead{color:var(--muted);max-width:52ch;margin:0 0 24px}
+.steps{list-style:none;margin:0 0 24px;padding:0;display:flex;flex-direction:column;gap:14px;counter-reset:st}
+.steps li{display:grid;grid-template-columns:36px 1fr;gap:12px;align-items:start;counter-increment:st}
+.steps li::before{content:counter(st);width:36px;height:36px;border-radius:50%;background:var(--accent);color:var(--accent-fg);display:grid;place-items:center;font:700 15px/1 var(--display)}
+.steps b{display:block}
+.steps span{color:var(--muted);font-size:15px}
+.basepr{display:flex;flex-wrap:wrap;gap:8px}
+.basepr div{border:1px solid var(--line);border-radius:6px;padding:8px 12px;font-size:14px}
+.basepr b{display:block;font-variant-numeric:tabular-nums}
+.cform{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:24px;display:flex;flex-direction:column;gap:12px}
+.cform h3{font:700 18px/1.2 var(--display);margin:0 0 4px}
+.cform label{font-size:13px;color:var(--muted);display:flex;flex-direction:column;gap:4px}
+.cform input,.cform select,.cform textarea{border:1px solid var(--line);background:var(--bg);border-radius:6px;padding:9px 10px;font-size:15px;min-width:0}
+.row2{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:10px}
+.preview{display:flex;gap:8px;flex-wrap:wrap}
+.preview img{width:72px;height:72px;object-fit:cover;border-radius:6px;border:1px solid var(--line)}
+.own{background:none;border:0;padding:0;color:var(--accent);font-size:14px;text-align:left;text-decoration:underline;text-underline-offset:3px}
+@media (max-width:860px){.custom{grid-template-columns:minmax(0,1fr)}}
+@media (max-width:760px){.hero{grid-template-columns:1fr;padding-block:28px 16px}.navlink{display:none}}
+@media (prefers-reduced-motion:reduce){.drawer{transition:none}}
+</style>
+
+<header class="top"><div class="wrap">
+  <div class="logo"><img src="data:image/jpeg;base64,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" alt="Логотип BLV">BELVI <span>BRAND</span></div>
+  <button class="navlink" id="customBtn" type="button">Своя вышивка</button>
+  <button class="navlink" id="sizeBtn" type="button">Таблица размеров</button>
+  <button class="navlink" id="deliveryBtn" type="button">Доставка</button>
+  <button class="cartbtn" id="cartBtn" type="button" aria-label="Открыть корзину">Корзина <b id="count">0</b></button>
+</div></header>
+
+<main class="wrap">
+  <section class="hero">
+    <div><div class="eyebrow">Belvi Brand · собственный пошив</div><h1>Одежда, в которой <em>узнают</em> тебя</h1></div>
+    <div>
+      <p>Худи, свитшоты и футболки, которые мы шьём сами, от раскроя до последнего стежка. Вышивку наносим вручную, и её дизайн можно выбрать любой.</p>
+      <div class="perks"><span class="perk">Бесплатная доставка от 30 000 ₸</span><span class="perk">Ручная вышивка</span><span class="perk">Любой дизайн на заказ</span><span class="perk">Возврат 14 дней</span></div>
+    </div>
+  </section>
+
+  <div class="toolbar" role="toolbar" aria-label="Фильтры">
+    <div id="cats" style="display:flex;flex-wrap:wrap;gap:8px"></div>
+    <span class="sp"></span>
+    <label for="sort" class="note">Сортировка</label>
+    <select id="sort">
+      <option value="new">Сначала новинки</option>
+      <option value="asc">Сначала дешевле</option>
+      <option value="desc">Сначала дороже</option>
+    </select>
+  </div>
+
+  <section class="grid" id="grid" aria-live="polite"></section>
+
+  <section class="custom" id="custom">
+    <div>
+      <div class="eyebrow">Собственный пошив</div>
+      <h2>Вышьем <em>любой дизайн</em> на вашей вещи</h2>
+      <p class="lead">Каждую вещь Belvi Brand шьём сами: кроим ткань, собираем изделие и вручную наносим вышивку. Можно взять готовую модель из каталога или придумать свою.</p>
+      <ol class="steps">
+        <li><div><b>Выберите основу</b><span>Футболка, свитшот или худи, цвет ткани и размер.</span></div></li>
+        <li><div><b>Опишите или пришлите дизайн</b><span>Орнамент, надпись, эмблему, имя, дату или свой рисунок. Подойдёт фото или эскиз от руки.</span></div></li>
+        <li><div><b>Согласуем макет и сроки</b><span>Покажем, как вышивка ляжет на изделие, и назовём итоговую цену.</span></div></li>
+        <li><div><b>Шьём и вышиваем</b><span>Готовую вещь отправим доставкой или передадим лично.</span></div></li>
+      </ol>
+      <div class="basepr">
+        <div>Футболка<b>от 27 000 ₸</b></div>
+        <div>Свитшот<b>от 36 000 ₸</b></div>
+        <div>Худи<b>от 45 000 ₸</b></div>
+      </div>
+    </div>
+    <form class="cform" id="customForm">
+      <h3>Заявка на вышивку</h3>
+      <div class="row2">
+        <label for="c-model">Изделие<select id="c-model"><option>Футболка</option><option selected>Свитшот</option><option>Худи</option></select></label>
+        <label for="c-size">Размер<select id="c-size"><option>XS</option><option>S</option><option selected>M</option><option>L</option><option>XL</option><option>Сниму мерки</option></select></label>
+      </div>
+      <label for="c-color">Цвет ткани<select id="c-color"><option>Молочный</option><option>Белый</option><option>Чёрный</option><option>Бежевый</option><option>Тёмно-синий</option><option>Другой, напишу в описании</option></select></label>
+      <label for="c-design">Какой дизайн вышить<textarea id="c-design" rows="3" required placeholder="Например: казахский орнамент на рукавах, красная нить, на груди имя «Айгерим»"></textarea></label>
+      <label for="c-file">Эскиз или пример (необязательно)<input id="c-file" type="file" accept="image/*" multiple></label>
+      <div class="preview" id="cPrev"></div>
+      <div class="row2">
+        <label for="c-name">Имя<input id="c-name" required autocomplete="name"></label>
+        <label for="c-phone">Телефон или WhatsApp<input id="c-phone" type="tel" required autocomplete="tel" placeholder="+7 700 000-00-00"></label>
+      </div>
+      <button class="primary" type="submit">Отправить заявку</button>
+      <p class="note" style="margin:0" id="cNote">Демо-витрина: заявка пока никуда не отправляется.</p>
+    </form>
+  </section>
+
+</main>
+
+<footer><div class="wrap">
+  <div><b style="color:var(--fg)">Belvi Brand</b><br>Демо-витрина. Цены и условия доставки приведены для примера.</div>
+  <div>Пн–Вс, 10:00–21:00<br>Телефон и почту добавим из ваших данных</div>
+</div></footer>
+
+<div class="scrim" id="scrim" hidden></div>
+<aside class="drawer" id="drawer" aria-label="Корзина" aria-hidden="true">
+  <div class="dhead"><h2 id="dTitle">Корзина</h2><button class="x" id="closeCart" type="button" aria-label="Закрыть">×</button></div>
+  <div id="dBody" style="display:flex;flex-direction:column;flex:1;min-height:0"></div>
+</aside>
+
+<dialog id="sizeDlg">
+  <h2 style="font:700 20px/1.2 var(--display);margin:0 0 6px">Таблица размеров</h2>
+  <p class="note" style="margin:0 0 14px">Обхваты тела в сантиметрах. Если вы между размерами, берите больший для свободной посадки.</p>
+  <div class="tbl"><table>
+    <thead><tr><th>Размер</th><th>RU</th><th>Грудь</th><th>Талия</th><th>Бёдра</th><th>Рост</th></tr></thead>
+    <tbody>
+      <tr><td>XS</td><td>42</td><td>82–86</td><td>64–68</td><td>88–92</td><td>158–164</td></tr>
+      <tr><td>S</td><td>44</td><td>86–90</td><td>68–72</td><td>92–96</td><td>164–170</td></tr>
+      <tr><td>M</td><td>46–48</td><td>90–98</td><td>72–80</td><td>96–102</td><td>170–176</td></tr>
+      <tr><td>L</td><td>50</td><td>98–104</td><td>80–88</td><td>102–108</td><td>176–182</td></tr>
+      <tr><td>XL</td><td>52–54</td><td>104–112</td><td>88–96</td><td>108–114</td><td>182–188</td></tr>
+    </tbody></table></div>
+  <form method="dialog" style="margin-top:16px"><button class="primary" type="submit">Понятно</button></form>
+</dialog>
+
+<dialog id="delDlg">
+  <h2 style="font:700 20px/1.2 var(--display);margin:0 0 12px">Доставка и оплата</h2>
+  <div class="tbl"><table>
+    <thead><tr><th>Способ</th><th>Срок</th><th>Цена</th></tr></thead>
+    <tbody>
+      <tr><td>Курьер по городу</td><td>1–2 дня</td><td>1 500 ₸</td></tr>
+      <tr><td>СДЭК по Казахстану</td><td>2–5 дней</td><td>1 500 ₸</td></tr>
+      <tr><td>Казпочта</td><td>5–10 дней</td><td>1 500 ₸</td></tr>
+    </tbody></table></div>
+  <p class="note">От 30 000 ₸ доставка бесплатная. Оплата при получении картой или наличными, можно примерить вещи перед оплатой.</p>
+  <form method="dialog"><button class="primary" type="submit">Закрыть</button></form>
+</dialog>
+
+<script>
+const CATS={all:'Все',hoodies:'Худи',sweats:'Свитшоты',tees:'Футболки'};
+const P=[
+  {id:1,n:'Худи «Сердце-океан»',d:'Футер с начёсом, вышивка на груди',cat:'hoodies',img:'hoodie-heart',bg:'#E7E3DA',p:45000,sz:['S','M','L','XL'],tag:'Хит'},
+  {id:2,n:'Футболка «Актобе 1967»',d:'Хлопок, контрастная окантовка, принт с грифоном',cat:'tees',img:'tee-aktobe',bg:'#E4E4E4',p:27000,sz:['S','M','L','XL']},
+  {id:3,n:'Футболка «Real Madrid 1902»',d:'Хлопок, вышитые эмблемы',cat:'tees',img:'tee-real',bg:'#E4E4E4',p:27000,sz:['S','M','L','XL']},
+  {id:4,n:'Худи «Arsenal» с вышивкой',d:'Футер, вышивка на груди и рукаве',cat:'hoodies',img:'hoodie-arsenal-emb',bg:'#E2DCD0',p:45000,sz:['S','M','L','XL']},
+  {id:5,n:'Худи «Arsenal 1886»',d:'Футер, крупная вышивка спереди',cat:'hoodies',img:'hoodie-arsenal-1886',bg:'#E2DCD0',p:45000,sz:['S','M','L','XL']},
+  {id:6,n:'Худи «Orgull de Campions»',d:'Тёмно-синий, принт состава 2014–2015 на спине',cat:'hoodies',img:'hoodie-barca',bg:'#D9DCE3',p:45000,sz:['S','M','L','XL']}
+  ,{id:7,n:'Свитшот «Ою» молочный',d:'Футер, красная вышивка казахского орнамента на груди и рукавах',cat:'sweats',imgs:['sweat-milk-1','sweat-milk-2'],bg:'#ECE7DF',p:36000,sz:['S','M','L','XL'],tag:'Новинка'},
+  {id:8,n:'Свитшот «Ою» чёрный',d:'Футер, белая вышивка казахского орнамента на груди и рукавах',cat:'sweats',imgs:['sweat-black-1','sweat-black-2'],bg:'#1E1E1E',p:36000,sz:['S','M','L','XL'],tag:'Новинка'}
+];
+const shot={};
+const svg=(x,i=0)=>`<img src="img/${x.imgs?x.imgs[i]:x.img}.jpg" alt="${x.n}" loading="lazy">`;
+const rub=n=>n.toLocaleString('ru-RU')+' ₸';
+const FREE=30000, SHIP=1500;
+
+let cat='all', sort='new', picked={}, cart=[];
+try{cart=JSON.parse(localStorage.getItem('cart')||'[]')}catch(e){cart=[]}
+const save=()=>{try{localStorage.setItem('cart',JSON.stringify(cart))}catch(e){}};
+
+const $=id=>document.getElementById(id);
+function renderCats(){
+  $('cats').innerHTML=Object.entries(CATS).map(([k,v])=>`<button class="chip" type="button" data-c="${k}" aria-pressed="${k===cat}">${v}</button>`).join('');
+}
+function renderGrid(){
+  let list=P.filter(x=>cat==='all'||x.cat===cat);
+  if(sort==='asc')list=[...list].sort((a,b)=>a.p-b.p);
+  if(sort==='desc')list=[...list].sort((a,b)=>b.p-a.p);
+  if(sort==='new')list=[...list].sort((a,b)=>b.id-a.id);
+  $('grid').innerHTML=list.map(x=>{
+    if(x.sz.length===1)picked[x.id]=x.sz[0];
+    const sel=picked[x.id];
+    return `<article class="card">
+      <div class="pic" style="background:${x.bg}">${x.tag?`<span class="badge">${x.tag}</span>`:''}${svg(x,shot[x.id]||0)}${x.imgs?`<div class="dots">${x.imgs.map((_,i)=>`<button class="dot" type="button" data-shot="${x.id}" data-i="${i}" aria-label="Фото ${i+1}" aria-pressed="${(shot[x.id]||0)===i}"></button>`).join('')}</div>`:''}</div>
+      <div class="meta"><h3>${x.n}</h3><span class="price">${x.old?`<s>${rub(x.old)}</s>`:''}${rub(x.p)}</span></div>
+      <div class="sub">${x.d}</div>
+      <div class="sizes">${x.sz.map(s=>`<button class="size" type="button" data-p="${x.id}" data-s="${s}" aria-pressed="${sel===s}">${s==='One'?'Один размер':s}</button>`).join('')}</div>
+      <button class="add" type="button" data-add="${x.id}" ${sel?'':'disabled'}>${sel?'В корзину':'Выберите размер'}</button>
+      <button class="own" type="button" data-own="${x.cat}">Хочу с другой вышивкой</button>
+    </article>`}).join('');
+}
+function count(){return cart.reduce((a,l)=>a+l.q,0)}
+function sum(){return cart.reduce((a,l)=>a+P.find(x=>x.id===l.id).p*l.q,0)}
+
+let view='cart';
+function renderCart(){
+  $('count').textContent=count();
+  const b=$('dBody');
+  if(view==='done'){$('dTitle').textContent='Готово';return}
+  if(view==='checkout'){$('dTitle').textContent='Оформление';
+    b.innerHTML=`<form class="co" id="coForm">
+      <label for="f-name">Имя и фамилия<input id="f-name" required autocomplete="name"></label>
+      <label for="f-phone">Телефон<input id="f-phone" required type="tel" autocomplete="tel" placeholder="+7 700 000-00-00"></label>
+      <label for="f-ship">Доставка<select id="f-ship"><option>Курьер по городу</option><option>СДЭК по Казахстану</option><option>Казпочта</option></select></label>
+      <label for="f-wish">Пожелания к вышивке (необязательно)<textarea id="f-wish" rows="2" placeholder="Цвет нити, имя, другой узор"></textarea></label>
+      <label for="f-addr">Адрес<textarea id="f-addr" rows="2" required autocomplete="street-address"></textarea></label>
+      <div class="total"><span>К оплате при получении</span><span>${rub(sum()+(sum()>=FREE?0:SHIP))}</span></div>
+      <p class="note" style="margin:0">Это демо-витрина: заявка не отправляется. Онлайн-оплату (Kaspi, карта) можно подключить позже.</p>
+      <button class="primary" type="submit">Подтвердить заказ</button>
+      <button class="chip" type="button" id="back">Назад в корзину</button>
+    </form>`;return}
+  $('dTitle').textContent='Корзина';
+  if(!cart.length){b.innerHTML='<div class="empty">В корзине пока пусто.<br>Выберите размер у товара и нажмите «В корзину».</div>';return}
+  const s=sum(), left=Math.max(0,FREE-s);
+  b.innerHTML=`<div class="lines">${cart.map((l,i)=>{const x=P.find(p=>p.id===l.id);return `<div class="line">
+      <div class="th" style="background:${x.bg}">${svg(x)}</div>
+      <div><div style="font-weight:600">${x.n}</div><small>Размер: ${l.s==='One'?'один':l.s}</small>
+        <div class="qty"><button type="button" data-dec="${i}" aria-label="Меньше">−</button><span>${l.q}</span><button type="button" data-inc="${i}" aria-label="Больше">+</button></div></div>
+      <div class="price">${rub(x.p*l.q)}</div></div>`}).join('')}</div>
+    <div class="ship">${left?`До бесплатной доставки: ${rub(left)}`:'Доставка бесплатная'}</div>
+    <div class="bar"><i style="width:${Math.min(100,s/FREE*100)}%"></i></div>
+    <div class="total"><span>Итого</span><span>${rub(s)}</span></div>
+    <button class="primary" type="button" id="toCo">Оформить заказ</button>`;
+}
+function openCart(){ $('drawer').classList.add('open');$('drawer').setAttribute('aria-hidden','false');$('scrim').hidden=false;if(view==='done')view='cart';renderCart()}
+function closeCart(){ $('drawer').classList.remove('open');$('drawer').setAttribute('aria-hidden','true');$('scrim').hidden=true}
+
+document.addEventListener('click',e=>{
+  const t=e.target.closest('button');if(!t)return;
+  if(t.dataset.c){cat=t.dataset.c;renderCats();renderGrid()}
+  else if(t.dataset.shot){shot[t.dataset.shot]=+t.dataset.i;renderGrid()}
+  else if(t.dataset.s){picked[t.dataset.p]=t.dataset.s;renderGrid()}
+  else if(t.dataset.add){const id=+t.dataset.add,s=picked[id];const l=cart.find(l=>l.id===id&&l.s===s);l?l.q++:cart.push({id,s,q:1});save();view='cart';t.textContent='Добавлено ✓';setTimeout(()=>{renderCart();openCart()},250)}
+  else if(t.dataset.inc){cart[+t.dataset.inc].q++;save();renderCart()}
+  else if(t.dataset.dec){const i=+t.dataset.dec;if(--cart[i].q<=0)cart.splice(i,1);save();renderCart()}
+  else if(t.id==='toCo'){view='checkout';renderCart()}
+  else if(t.id==='back'){view='cart';renderCart()}
+  else if(t.dataset.own){$('c-model').value=TYPE[t.dataset.own];$('custom').scrollIntoView({behavior:'smooth'});setTimeout(()=>$('c-design').focus({preventScroll:true}),500)}
+});
+document.addEventListener('submit',e=>{
+  if(e.target.id==='customForm'){e.preventDefault();const n=$('c-name').value.trim();$('cNote').innerHTML=`<b style="color:var(--ok)">Заявка BLV-${String(Date.now()).slice(-6)} принята.</b> ${n?n+', в':'В'} рабочей версии мы свяжемся с вами, чтобы согласовать макет. Демо: данные никуда не отправлены.`;return}
+  if(e.target.id!=='coForm')return;e.preventDefault();
+  const name=$('f-name').value.trim().split(' ')[0];
+  const num='BLV-'+String(Date.now()).slice(-6);
+  cart=[];save();view='done';renderCart();
+  $('dBody').innerHTML=`<div class="done"><h3>Заказ ${num} принят</h3><p>${name?name+', с':'С'}пасибо! В рабочей версии менеджер перезвонит, чтобы подтвердить доставку.</p><p class="note">Демо: данные никуда не отправлены.</p></div><button class="primary" type="button" id="back">Продолжить покупки</button>`;
+});
+$('sort').addEventListener('change',e=>{sort=e.target.value;renderGrid()});
+$('cartBtn').onclick=openCart;$('closeCart').onclick=closeCart;$('scrim').onclick=closeCart;
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeCart()});
+$('sizeBtn').onclick=()=>$('sizeDlg').showModal();
+$('deliveryBtn').onclick=()=>$('delDlg').showModal();
+const TYPE={hoodies:'Худи',sweats:'Свитшот',tees:'Футболка'};
+$('c-file').addEventListener('change',e=>{$('cPrev').innerHTML='';[...e.target.files].slice(0,6).forEach(f=>{const i=new Image();i.alt='Эскиз';i.src=URL.createObjectURL(f);$('cPrev').appendChild(i)})});
+$('customBtn').onclick=()=>$('custom').scrollIntoView({behavior:'smooth'});
+renderCats();renderGrid();renderCart();
+</script>
+
+</html>
